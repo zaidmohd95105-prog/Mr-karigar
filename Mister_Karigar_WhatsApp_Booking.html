@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="hi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mister Karigar</title>
+<style>
+:root{--blue:#0754b8;--blue2:#0b6be8;--bg:#f3f7fc;--ink:#14243b;--muted:#64748b;--green:#159447}
+*{box-sizing:border-box}body{margin:0;font-family:system-ui,-apple-system,"Noto Sans Devanagari",sans-serif;background:var(--bg);color:var(--ink)}
+header{background:linear-gradient(135deg,#063d8a,#0875ed);color:white;padding:22px 18px 24px;border-radius:0 0 24px 24px}
+.brand{font-size:24px;font-weight:850;letter-spacing:.2px}.tag{font-size:13px;opacity:.9;margin-top:4px}
+main{max-width:720px;margin:auto;padding:16px}
+h2{font-size:18px;margin:18px 0 10px}.hero{background:white;border-radius:18px;padding:16px;box-shadow:0 4px 18px #14345d12}
+.hero h1{font-size:21px;margin:0 0 6px}.hero p{font-size:14px;color:var(--muted);margin:0}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.service{background:white;border:1px solid #e4eaf2;border-radius:16px;padding:14px 10px;text-align:center;cursor:pointer;font:inherit;color:var(--ink);box-shadow:0 3px 12px #14345d08}
+.service .emoji{font-size:30px;display:block;margin-bottom:6px}.service strong{font-size:14px}.service.active{border:2px solid var(--blue2);background:#eaf3ff}
+.search{width:100%;padding:12px 13px;border:1px solid #d8e1ed;border-radius:12px;font:inherit;background:white}
+.worker{background:white;border:1px solid #e4eaf2;border-radius:16px;padding:14px;margin:10px 0;display:flex;gap:12px;align-items:flex-start}
+.avatar{width:50px;height:50px;flex:0 0 50px;border-radius:14px;background:#e8f2ff;display:grid;place-items:center;font-size:27px}
+.worker h3{font-size:16px;margin:0 0 3px}.worker p{font-size:13px;color:var(--muted);margin:3px 0}
+.price{font-weight:750;color:var(--blue);margin:6px 0}
+button.primary{border:0;background:var(--blue2);color:white;border-radius:11px;padding:11px 14px;font:inherit;font-weight:700;cursor:pointer}
+button.secondary{border:1px solid #cbd5e1;background:white;color:var(--ink);border-radius:11px;padding:10px 14px;font:inherit;cursor:pointer}
+.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center;justify-content:space-between}
+form{background:white;border:1px solid #e4eaf2;border-radius:16px;padding:16px}
+label{display:block;font-size:13px;font-weight:650;margin:12px 0 5px}
+input,select,textarea{width:100%;padding:11px;border:1px solid #d8e1ed;border-radius:10px;font:inherit;background:#fff}
+textarea{min-height:75px;resize:vertical}
+.note{background:#fff8df;border:1px solid #f5dfa0;border-radius:12px;padding:12px;font-size:12px;color:#664b00;margin-top:14px}
+.hidden{display:none!important}.empty{padding:20px;text-align:center;color:var(--muted)}
+footer{text-align:center;color:var(--muted);font-size:12px;padding:20px}
+</style>
+</head>
+<body>
+<header>
+  <div class="brand">🛠️ Mister Karigar</div>
+  <div class="tag">आपके घर के काम का आसान साथी</div>
+</header>
+<main>
+  <section class="hero">
+    <h1>घर का काम, अब आसान!</h1>
+    <p>अपनी जरूरत की सेवा चुनें और बुकिंग का अनुरोध भरें।</p>
+  </section>
+  <h2>कौन-सी सेवा चाहिए?</h2>
+  <div class="grid" id="services">
+    <button class="service active" data-service="सभी सेवाएँ"><span class="emoji">🏠</span><strong>सभी सेवाएँ</strong></button>
+    <button class="service" data-service="इलेक्ट्रिशियन"><span class="emoji">⚡</span><strong>इलेक्ट्रिशियन</strong></button>
+    <button class="service" data-service="प्लंबर"><span class="emoji">🚰</span><strong>प्लंबर</strong></button>
+    <button class="service" data-service="कारपेंटर"><span class="emoji">🪚</span><strong>कारपेंटर</strong></button>
+    <button class="service" data-service="पेंटर"><span class="emoji">🎨</span><strong>पेंटर</strong></button>
+    <button class="service" data-service="सफाई कर्मचारी"><span class="emoji">🧹</span><strong>सफाई कर्मचारी</strong></button>
+  </div>
+  <div class="row"><h2>कारीगर</h2><span id="count" style="font-size:12px;color:#64748b">डेमो सूची</span></div>
+  <input class="search" id="search" placeholder="कारीगर या सेवा खोजें…">
+  <div id="workers"></div>
+  <h2 id="booking-title">बुकिंग का अनुरोध</h2>
+  <form id="booking">
+    <p style="font-size:13px;color:#64748b;margin-top:0">अपनी जानकारी भरें। बुकिंग का संदेश आपके WhatsApp पर खुलेगा।</p>
+    <label for="service">सेवा</label>
+    <select id="service" required>
+      <option>इलेक्ट्रिशियन</option><option>प्लंबर</option><option>कारपेंटर</option><option>पेंटर</option><option>सफाई कर्मचारी</option>
+    </select>
+    <label for="name">आपका नाम</label><input id="name" required placeholder="अपना नाम लिखें">
+    <label for="phone">मोबाइल नंबर</label><input id="phone" type="tel" inputmode="numeric" pattern="[0-9+\-\s]{10,15}" required placeholder="मोबाइल नंबर">
+    <label for="date">काम की तारीख</label><input id="date" type="date" required>
+    <label for="address">पूरा पता</label><textarea id="address" required placeholder="मकान नंबर, मोहल्ला, शहर"></textarea>
+    <label for="details">काम का विवरण</label><textarea id="details" placeholder="जैसे: नल लीक हो रहा है"></textarea>
+    <div style="margin-top:14px"><button class="primary" type="submit" style="width:100%">बुकिंग विवरण तैयार करें</button></div>
+  </form>
+  <div id="confirmation" class="hero hidden" style="margin-top:14px" aria-live="polite"></div>
+  <div class="note"><strong>ध्यान दें:</strong> कारीगरों के नाम और कीमतें केवल नमूने हैं। बुकिंग का संदेश आपके WhatsApp नंबर पर खुलेगा; WhatsApp में जाकर आपको खुद Send दबाना होगा।</div>
+</main>
+<footer>Mister Karigar · शुरुआती डेमो</footer>
+<script>
+const data=[
+ {name:"रमेश कुमार",service:"इलेक्ट्रिशियन",emoji:"⚡",rating:"4.8",price:"₹200/घंटा",desc:"बिजली के छोटे-मोटे काम (नमूना)"},
+ {name:"सलीम अंसारी",service:"प्लंबर",emoji:"🚰",rating:"4.6",price:"₹180/घंटा",desc:"नल और पाइप की मरम्मत (नमूना)"},
+ {name:"विकास सिंह",service:"कारपेंटर",emoji:"🪚",rating:"4.5",price:"₹220/घंटा",desc:"दरवाजे और फर्नीचर का काम (नमूना)"},
+ {name:"अमित वर्मा",service:"पेंटर",emoji:"🎨",rating:"4.7",price:"₹250/घंटा",desc:"दीवार पेंटिंग (नमूना)"},
+ {name:"पूजा देवी",service:"सफाई कर्मचारी",emoji:"🧹",rating:"4.8",price:"₹300/काम",desc:"घर की सफाई (नमूना)"}
+];
+let selected="सभी सेवाएँ";
+const workers=document.getElementById("workers");
+function render(){
+ const q=document.getElementById("search").value.trim().toLowerCase();
+ const list=data.filter(w=>(selected==="सभी सेवाएँ"||w.service===selected)&&(`${w.name} ${w.service} ${w.desc}`).toLowerCase().includes(q));
+ document.getElementById("count").textContent=list.length+" नमूना विकल्प";
+ workers.innerHTML=list.length?list.map(w=>`<article class="worker"><div class="avatar">${w.emoji}</div><div style="flex:1"><h3>${w.name}</h3><p>${w.service} · ⭐ ${w.rating}</p><p>${w.desc}</p><div class="price">${w.price}</div><button class="primary choose" data-service="${w.service}">यह सेवा चुनें</button></div></article>`).join(""):'<div class="empty">कोई विकल्प नहीं मिला। दूसरी सेवा चुनें।</div>';
+ document.querySelectorAll(".choose").forEach(b=>b.addEventListener("click",()=>{document.getElementById("service").value=b.dataset.service;document.getElementById("booking-title").scrollIntoView({behavior:"smooth"});}));
+}
+document.querySelectorAll(".service").forEach(b=>b.addEventListener("click",()=>{selected=b.dataset.service;document.querySelectorAll(".service").forEach(x=>x.classList.toggle("active",x===b));if(selected!=="सभी सेवाएँ")document.getElementById("service").value=selected;render();}));
+document.getElementById("search").addEventListener("input",render);
+const WHATSAPP_NUMBER = "917860385761";
+document.getElementById("booking").addEventListener("submit",e=>{
+ e.preventDefault();
+ const v=id=>document.getElementById(id).value.trim();
+ const message=`नमस्ते Mister Karigar! नई बुकिंग का अनुरोध:\nसेवा: ${v("service")}\nग्राहक का नाम: ${v("name")}\nग्राहक का मोबाइल: ${v("phone")}\nकाम की तारीख: ${v("date")}\nपता: ${v("address")}\nकाम का विवरण: ${v("details")||"नहीं बताया"}`;
+ const url="https://wa.me/"+WHATSAPP_NUMBER+"?text="+encodeURIComponent(message);
+ window.location.href=url;
+});
+render();
+</script>
+</body>
+</html>
